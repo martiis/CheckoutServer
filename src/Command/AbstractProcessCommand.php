@@ -29,8 +29,10 @@ class AbstractProcessCommand extends LoggerAwareCommand
     {
         $this->setOutput($output);
         $this->getLogger()->debug('process started', ['process' => $this->getName()]);
+        $exitCode = parent::run($input, $output);
+        $this->getLogger()->debug('process quit', ['process' => $this->getName()]);
 
-        return parent::run($input, $output);
+        return $exitCode;
     }
 
     /**
