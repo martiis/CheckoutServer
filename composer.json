@@ -1,0 +1,17 @@
+{
+    "name": "martiis/checkout-server",
+    "description": "KTU assignment - T120B180: Development and Deployment of Network Based Services",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martynas Sudintas",
+            "email": "martynas.sudintas@ongr.io"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "symfony/console": "~2.7",
+        "react/react": "~0.4",
+        "monolog/monolog": "~1.0"
+    }
+}
