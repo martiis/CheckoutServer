@@ -11,11 +11,7 @@
 
 namespace Martiis\CheckoutServer\Command;
 
-use React\HttpClient\Factory;
-use React\Socket\Connection;
-use React\Socket\Server;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Martiis\CheckoutServer\SocketPort;
 
 class StorageProcessCommand extends AbstractProcessCommand
 {
@@ -25,30 +21,8 @@ class StorageProcessCommand extends AbstractProcessCommand
     protected function configure()
     {
         $this
+            ->setPort(SocketPort::STORAGE)
             ->setName('process:storage')
             ->setDescription('Holds products that are ready to ship.');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $loop = Factory::create();
-        $socket = new Server($loop);
-        $socket->on('connection', [$this, 'onConnection']);
-        $socket->listen('4002');
-
-        $output->writeln('<comment>Payment process is running on port</comment> <info>4002</info>');
-        $loop->run();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function onConnection(Connection $connection)
-    {
-        parent::onConnection($connection);
-        $connection->write("#### Storage process #####\n");
     }
 }
