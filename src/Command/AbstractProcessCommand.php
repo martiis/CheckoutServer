@@ -12,11 +12,10 @@
 namespace Martiis\CheckoutServer\Command;
 
 use React\Socket\Connection;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AbstractProcessCommand extends Command
+class AbstractProcessCommand extends LoggerAwareCommand
 {
     /**
      * @var OutputInterface
@@ -29,6 +28,7 @@ class AbstractProcessCommand extends Command
     public function run(InputInterface $input, OutputInterface $output)
     {
         $this->setOutput($output);
+        $this->getLogger()->debug('process started', ['process' => $this->getName()]);
 
         return parent::run($input, $output);
     }
@@ -38,9 +38,11 @@ class AbstractProcessCommand extends Command
      */
     public function onConnection(Connection $connection)
     {
+        $address = $connection->getRemoteAddress();
         $this
             ->getOutput()
-            ->writeln(sprintf("<comment>New connection from </comment>%s", $connection->getRemoteAddress()));
+            ->writeln(sprintf("<comment>New connection from </comment>%s", $address));
+        $this->getLogger()->debug('new connection', ['process' => $this->getName(), 'address' => $address]);
     }
 
     /**

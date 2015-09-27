@@ -1,2 +1,5 @@
 /.idea/
 /vendor/
+/app/logs/*
+!app/logs/.gitkeep
+/composer.phar

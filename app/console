@@ -5,12 +5,18 @@ require_once __DIR__ . '/bootstrap.php';
 
 use Symfony\Component\Console\Application;
 use Martiis\CheckoutServer\Command\CartProcessCommand;
+use Martiis\CheckoutServer\Command\LoggerAwareCommand;
 use Martiis\CheckoutServer\Command\PaymentProcessCommand;
 use Martiis\CheckoutServer\Command\StorageProcessCommand;
 
+$aware = function (LoggerAwareCommand $command) use ($logger) {
+    $command->setLogger($logger);
+    return $command;
+};
+
 $app = new Application('Checkout Server Application', '0.1');
-$app->add(new CartProcessCommand());
-$app->add(new PaymentProcessCommand());
-$app->add(new StorageProcessCommand());
+$app->add($aware(new CartProcessCommand()));
+$app->add($aware(new PaymentProcessCommand()));
+$app->add($aware(new StorageProcessCommand()));
 
 $app->run();
