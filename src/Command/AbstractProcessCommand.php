@@ -11,6 +11,7 @@
 
 namespace Martiis\CheckoutServer\Command;
 
+use React\Socket\Connection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,6 +31,16 @@ class AbstractProcessCommand extends Command
         $this->setOutput($output);
 
         return parent::run($input, $output);
+    }
+
+    /**
+     * @param Connection $connection
+     */
+    public function onConnection(Connection $connection)
+    {
+        $this
+            ->getOutput()
+            ->writeln(sprintf("<comment>New connection from </comment>%s", $connection->getRemoteAddress()));
     }
 
     /**

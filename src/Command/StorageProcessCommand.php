@@ -18,7 +18,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class StorageProcessCommand extends Command
+class StorageProcessCommand extends AbstractProcessCommand
 {
     /**
      * {@inheritdoc}
@@ -45,13 +45,11 @@ class StorageProcessCommand extends Command
     }
 
     /**
-     * @param Connection $connection
+     * {@inheritdoc}
      */
     public function onConnection(Connection $connection)
     {
-        $this
-            ->getOutput()
-            ->writeln(sprintf("<comment>New connection from </comment>%s", $connection->getRemoteAddress()));
+        parent::onConnection($connection);
         $connection->write("#### Storage process #####\n");
     }
 }

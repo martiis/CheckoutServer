@@ -45,13 +45,11 @@ class CartProcessCommand extends AbstractProcessCommand
     }
 
     /**
-     * @param Connection $connection
+     * {@inheritdoc}
      */
     public function onConnection(Connection $connection)
     {
-        $this
-            ->getOutput()
-            ->writeln(sprintf("<comment>New connection from </comment>%s", $connection->getRemoteAddress()));
+        parent::onConnection($connection);
         $connection->write("#### Cart process #####\n");
     }
 }
