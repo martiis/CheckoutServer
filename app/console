@@ -3,5 +3,14 @@
 
 require_once __DIR__ . '/bootstrap.php';
 
-$app = new \Symfony\Component\Console\Application();
+use Symfony\Component\Console\Application;
+use Martiis\CheckoutServer\Command\CartProcessCommand;
+use Martiis\CheckoutServer\Command\PaymentProcessCommand;
+use Martiis\CheckoutServer\Command\StorageProcessCommand;
+
+$app = new Application('Checkout Server Application', '0.1');
+$app->add(new CartProcessCommand());
+$app->add(new PaymentProcessCommand());
+$app->add(new StorageProcessCommand());
+
 $app->run();
