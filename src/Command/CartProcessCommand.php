@@ -27,7 +27,7 @@ class CartProcessCommand extends AbstractProcessCommand
     {
         $this
             ->setName('process:cart')
-            ->setDescription("Acts as product queue");
+            ->setDescription("Acts as product queue.");
     }
 
     /**
