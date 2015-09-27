@@ -11,11 +11,14 @@
 
 namespace Martiis\CheckoutServer\Command;
 
+use React\EventLoop\Factory;
+use React\Socket\Connection;
+use React\Socket\Server;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CartProcessCommand extends Command
+class CartProcessCommand extends AbstractProcessCommand
 {
     /**
      * {@inheritdoc}
@@ -32,6 +35,23 @@ class CartProcessCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<comment>Cart process....</comment>');
+        $loop = Factory::create();
+        $socket = new Server($loop);
+        $socket->on('connection', [$this, 'onConnection']);
+        $socket->listen('4000');
+
+        $output->writeln('<comment>Cart process is running on port</comment> <info>4000</info>');
+        $loop->run();
+    }
+
+    /**
+     * @param Connection $connection
+     */
+    public function onConnection(Connection $connection)
+    {
+        $this
+            ->getOutput()
+            ->writeln(sprintf("<comment>New connection from </comment>%s", $connection->getRemoteAddress()));
+        $connection->write("#### Cart process #####\n");
     }
 }
