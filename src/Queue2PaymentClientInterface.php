@@ -13,5 +13,12 @@ namespace Martiis\CheckoutServer;
 
 interface Queue2PaymentClientInterface
 {
-    public function authorizeItem();
+    /**
+     * Sends item to authorization
+     *
+     * @param mixed $item
+     *
+     * @return bool
+     */
+    public function authorizeItem($item);
 }

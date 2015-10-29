@@ -11,17 +11,25 @@
 
 namespace Martiis\CheckoutServer\Queue;
 
+use Martiis\CheckoutServer\AbstractServer;
 use Martiis\CheckoutServer\Payment2QueueServerInterface;
+use Martiis\CheckoutServer\SocketPort;
 
-class Payment2QueueServer implements Payment2QueueServerInterface
+class Payment2QueueServer extends AbstractServer implements Payment2QueueServerInterface
 {
-    public function sendToStorage()
+    /**
+     * {@inheritdoc}
+     */
+    public function sendToStorage($data)
     {
         // TODO: Implement sendToStorage() method.
     }
 
-    public function run()
+    /**
+     * {@inheritdoc}
+     */
+    public function getPort()
     {
-        // TODO: Implement run() method.
+        return SocketPort::QUEUE;
     }
 }

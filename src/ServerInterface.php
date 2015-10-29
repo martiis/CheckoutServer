@@ -11,10 +11,14 @@
 
 namespace Martiis\CheckoutServer;
 
+use Symfony\Component\Console\Output\OutputInterface;
+
 interface ServerInterface
 {
     /**
      * Starts server listening on specific port.
+     *
+     * @param OutputInterface|null $output
      */
-    public function run();
+    public function run(OutputInterface $output = null);
 }

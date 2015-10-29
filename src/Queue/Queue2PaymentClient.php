@@ -11,12 +11,25 @@
 
 namespace Martiis\CheckoutServer\Queue;
 
+use Martiis\CheckoutServer\AbstractClient;
 use Martiis\CheckoutServer\Queue2PaymentClientInterface;
+use Martiis\CheckoutServer\SocketPort;
 
-class Queue2PaymentClient implements Queue2PaymentClientInterface
+class Queue2PaymentClient extends AbstractClient implements Queue2PaymentClientInterface
 {
-    public function authorizeItem()
+    /**
+     * {@inheritdoc}
+     */
+    public function authorizeItem($item)
     {
-        // TODO: Implement authorizeItem() method.
+        return (bool)fwrite($this->getClient(), 'authorizeItem ' . $item);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPort()
+    {
+        return SocketPort::PAYMENT;
     }
 }

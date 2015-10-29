@@ -25,6 +25,6 @@ class Queue2StorageCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $server = new Queue2StorageServer();
-        $server->run();
+        $server->run($output);
     }
 }

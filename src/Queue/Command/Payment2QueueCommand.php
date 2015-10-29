@@ -25,6 +25,6 @@ class Payment2QueueCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $server = new Payment2QueueServer();
-        $server->run();
+        $server->run($output);
     }
 }
