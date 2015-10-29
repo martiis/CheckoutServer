@@ -54,7 +54,6 @@ abstract class AbstractServer implements ServerInterface
         $this->setOutput($output);
         $loop = Factory::create();
         $socket = new Server($loop);
-        $socket->
         $socket->listen($this->getPort());
         $ref = $this;
         $socket->on('connection', function (Connection $connection) use ($ref) {
