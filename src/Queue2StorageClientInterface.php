@@ -13,5 +13,5 @@ namespace Martiis\CheckoutServer;
 
 interface Queue2StorageClientInterface
 {
-    public function sendItemToStorage();
+    public function saveItem();
 }

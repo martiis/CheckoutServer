@@ -15,7 +15,7 @@ use Martiis\CheckoutServer\Queue2StorageClientInterface;
 
 class Queue2StorageClient implements Queue2StorageClientInterface
 {
-    public function sendItemToStorage()
+    public function saveItem()
     {
         // TODO: Implement sendItemToStorage() method.
     }
