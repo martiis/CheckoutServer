@@ -14,11 +14,6 @@ abstract class AbstractClient
         $this->client = @stream_socket_client(sprintf('%s:%s', $this->getHost(), $this->getPort()));
     }
 
-    final public function __destruct()
-    {
-        fclose($this->client);
-    }
-
     /**
      * @return string
      */

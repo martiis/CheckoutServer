@@ -22,10 +22,9 @@ class Queue2PaymentServer extends AbstractServer implements Queue2PaymentServerI
      */
     public function authorizeItem($data)
     {
-        list($data, $connection) = func_get_args();
-        $connection->write("Payment: recieved item...\nPayment: authorizing...");
+        $this->getOutput()->writeln('Payment: Recieved ' . $data . '. Authorizing....');
         sleep(3);
-        $connection->write("Done\nPayment: noticing queue.");
+        $this->getOutput()->writeln('Payment: Authorized. pinging queue...');
     }
 
     /**

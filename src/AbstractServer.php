@@ -19,6 +19,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class AbstractServer implements ServerInterface
 {
     /**
+     * @var OutputInterface
+     */
+    private $output;
+
+    /**
      * Returns port for server.
      *
      * @return int
@@ -33,8 +38,6 @@ abstract class AbstractServer implements ServerInterface
      */
     public function routeMethod($data, Connection $connection)
     {
-        echo 'called';
-
         list($method, $data) = explode(' ', $data, 2);
         if (method_exists($this, $method)) {
             $this->{$method}($data, $connection);
@@ -48,15 +51,33 @@ abstract class AbstractServer implements ServerInterface
      */
     public function run(OutputInterface $output = null)
     {
+        $this->setOutput($output);
         $loop = Factory::create();
         $socket = new Server($loop);
         $socket->listen($this->getPort());
-        $socket->on('connection', function (Connection $connection) use ($output) {
-            $output && $output->writeln('New connection!');
+        $ref = $this;
+        $socket->on('connection', function (Connection $connection) use ($ref) {
+            $ref->getOutput() && $ref->getOutput()->writeln('New connection!');
+            $connection->on('data', [$ref, 'routeMethod']);
         });
-        $socket->on('data', [$this, 'routeMethod']);
 
         $output && $output->writeln('<comment>Server running...</comment>');
         $loop->run();
+    }
+
+    /**
+     * @return OutputInterface
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
+    /**
+     * @param OutputInterface $output
+     */
+    private function setOutput($output)
+    {
+        $this->output = $output;
     }
 }

@@ -14,6 +14,8 @@ namespace Martiis\CheckoutServer\Queue;
 use Martiis\CheckoutServer\AbstractClient;
 use Martiis\CheckoutServer\Queue2PaymentClientInterface;
 use Martiis\CheckoutServer\SocketPort;
+use React\EventLoop\Factory;
+use React\Stream\Stream;
 
 class Queue2PaymentClient extends AbstractClient implements Queue2PaymentClientInterface
 {
@@ -22,7 +24,11 @@ class Queue2PaymentClient extends AbstractClient implements Queue2PaymentClientI
      */
     public function authorizeItem($item)
     {
-        return (bool)fwrite($this->getClient(), 'authorizeItem ' . $item);
+        $loop = Factory::create();
+        $conn = new Stream($this->getClient(), $loop);
+        $conn->write('authorizeItem ' . $item);
+
+        $loop->run();
     }
 
     /**

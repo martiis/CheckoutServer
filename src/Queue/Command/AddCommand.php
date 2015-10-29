@@ -34,7 +34,7 @@ class AddCommand extends Command
         $client = new Queue2PaymentClient();
 
         if (!$client->isConnected()) {
-            $output->writeln('<error>Was unable to make connection!</error>');
+            $output->writeln('<error>Unable to make connection!</error>');
             return 1;
         }
 
