@@ -25,6 +25,8 @@ class Queue2PaymentServer extends AbstractServer implements Queue2PaymentServerI
         $this->getOutput()->writeln('Payment: Recieved ' . $data . '. Authorizing....');
         sleep(3);
         $this->getOutput()->writeln('Payment: Authorized. pinging queue...');
+        $client = new Payment2QueueClient();
+        $client->sendToStorage($data);
     }
 
     /**

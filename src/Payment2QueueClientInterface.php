@@ -13,5 +13,10 @@ namespace Martiis\CheckoutServer;
 
 interface Payment2QueueClientInterface
 {
-    public function sendToStorage();
+    /**
+     * Asks queue to send item to storage.
+     *
+     * @param mixed $item
+     */
+    public function sendToStorage($item);
 }

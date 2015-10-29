@@ -9,14 +9,29 @@
  * file that was distributed with this source code.
  */
 
-namespace Martiis\CheckoutServer\Queue;
+namespace Martiis\CheckoutServer\Payment;
 
+use Martiis\CheckoutServer\AbstractClient;
 use Martiis\CheckoutServer\Payment2QueueClientInterface;
+use Martiis\CheckoutServer\SocketPort;
+use React\EventLoop\Factory;
+use React\Stream\Stream;
 
-class Payment2QueueClient implements Payment2QueueClientInterface
+class Payment2QueueClient extends AbstractClient implements Payment2QueueClientInterface
 {
-    public function sendToStorage()
+    public function sendToStorage($item)
     {
-        // TODO: Implement sendToStorage() method.
+        $loop = Factory::create();
+        $conn = new Stream($this->getClient(), $loop);
+        $conn->write(sprintf('%s %s', 'sendToStorage', $item));
+        $loop->tick();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPort()
+    {
+        return SocketPort::QUEUE;
     }
 }

@@ -17,8 +17,6 @@ interface Queue2PaymentClientInterface
      * Sends item to authorization
      *
      * @param mixed $item
-     *
-     * @return bool
      */
     public function authorizeItem($item);
 }

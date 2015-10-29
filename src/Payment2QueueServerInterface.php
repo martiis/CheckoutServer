@@ -16,7 +16,7 @@ interface Payment2QueueServerInterface extends ServerInterface
     /**
      * Sends data to queue.
      *
-     * @param mixed $data
+     * @param mixed $item
      */
-    public function sendToStorage($data);
+    public function sendToStorage($item);
 }

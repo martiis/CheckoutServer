@@ -38,11 +38,8 @@ class AddCommand extends Command
             return 1;
         }
 
-        if ($client->authorizeItem($input->getArgument('value'))) {
-            $output->writeln('Sent new item to payment!');
-        } else {
-            $output->writeln('Failed to send item..');
-        }
+        $client->authorizeItem($input->getArgument('value'));
+        $output->writeln('Sent new item to payment!');
 
         return 0;
     }
