@@ -13,5 +13,10 @@ namespace Martiis\CheckoutServer;
 
 interface Queue2StorageServerInterface extends ServerInterface
 {
-    public function saveItem();
+    /**
+     * Saves item in local storage.
+     *
+     * @param mixed $item
+     */
+    public function saveItem($item);
 }

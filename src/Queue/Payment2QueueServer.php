@@ -23,6 +23,8 @@ class Payment2QueueServer extends AbstractServer implements Payment2QueueServerI
     public function sendToStorage($item)
     {
         $this->getOutput()->writeln('Queue: sending ' . $item . ' to storage...');
+        $client = new Queue2StorageClient();
+        $client->saveItem($item);
     }
 
     /**

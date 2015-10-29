@@ -13,5 +13,8 @@ namespace Martiis\CheckoutServer;
 
 interface Queue2StorageClientInterface
 {
-    public function saveItem();
+    /**
+     * @param mixed $item
+     */
+    public function saveItem($item);
 }

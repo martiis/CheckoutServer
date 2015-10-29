@@ -11,17 +11,32 @@
 
 namespace Martiis\CheckoutServer\Storage;
 
+use Martiis\CheckoutServer\AbstractServer;
 use Martiis\CheckoutServer\Queue2StorageServerInterface;
+use Martiis\CheckoutServer\SocketPort;
+use React\Socket\Connection;
 
-class Queue2StorageServer implements Queue2StorageServerInterface
+class Queue2StorageServer extends AbstractServer implements Queue2StorageServerInterface
 {
-    public function saveItem()
+    /**
+     * @var array
+     */
+    private $storage = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function saveItem($item)
     {
-        // TODO: Implement saveItem() method.
+        $this->getOutput()->writeln('Storage: saving ' . $item);
+        $this->storage[] = $item;
     }
 
-    public function run()
+    /**
+     * {@inheritdoc}
+     */
+    public function getPort()
     {
-        // TODO: Implement run() method.
+        return SocketPort::STORAGE;
     }
 }
