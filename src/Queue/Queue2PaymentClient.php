@@ -26,7 +26,7 @@ class Queue2PaymentClient extends AbstractClient implements Queue2PaymentClientI
     {
         $loop = Factory::create();
         $conn = new Stream($this->getClient(), $loop);
-        $conn->write(sprintf('%s %s', 'authorizeItem', $item));
+        $conn->write(sprintf('%s %s', 'authorizeItem', json_encode($item)));
         $loop->tick();
     }
 

@@ -4,16 +4,16 @@
 require_once __DIR__ . '/bootstrap.php';
 
 use Symfony\Component\Console\Application;
-use Martiis\CheckoutServer\Payment\Command\Queue2PaymentCommand;
+use Martiis\CheckoutServer\Payment\Command\PaymentCommand;
+use Martiis\CheckoutServer\Queue\Command\QueueCommand;
 use Martiis\CheckoutServer\Queue\Command\AddCommand;
-use Martiis\CheckoutServer\Queue\Command\Payment2QueueCommand;
-use Martiis\CheckoutServer\Storage\Command\Queue2StorageCommand;
+use Martiis\CheckoutServer\Storage\Command\StorageCommand;
 
 $app = new Application('Checkout Server Application', '0.1');
 
-$app->add(new Queue2PaymentCommand());
-$app->add(new Payment2QueueCommand());
-$app->add(new Queue2StorageCommand());
+$app->add(new PaymentCommand());
+$app->add(new StorageCommand());
+$app->add(new QueueCommand());
 $app->add(new AddCommand());
 
 $app->run();

@@ -1,9 +1,8 @@
 <?php
 
-
 namespace Martiis\CheckoutServer\Queue\Command;
 
-use Martiis\CheckoutServer\Queue\Queue2PaymentClient;
+use Martiis\CheckoutServer\Queue\QueueClient;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,10 +16,10 @@ class AddCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('martiis:add')
-            ->setDescription('Adds item to queue.')
+            ->setName('queue:add')
+            ->setDescription('Adds item to queue')
             ->addArgument(
-                'value',
+                'item',
                 InputArgument::REQUIRED,
                 'Item value'
             );
@@ -31,16 +30,7 @@ class AddCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $client = new Queue2PaymentClient();
-
-        if (!$client->isConnected()) {
-            $output->writeln('<error>Unable to make connection!</error>');
-            return 1;
-        }
-
-        $client->authorizeItem($input->getArgument('value'));
-        $output->writeln('Sent new item to payment!');
-
-        return 0;
+        $client = new QueueClient();
+        $client->add($input->getArgument('item'));
     }
 }

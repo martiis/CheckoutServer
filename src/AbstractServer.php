@@ -40,7 +40,7 @@ abstract class AbstractServer implements ServerInterface
     {
         list($method, $data) = explode(' ', $data, 2);
         if (method_exists($this, $method)) {
-            $this->{$method}($data, $connection);
+            $this->{$method}(json_decode($data, true), $connection);
         } else {
             $connection->write("Error: `$method`` not found!");
         }
@@ -57,7 +57,6 @@ abstract class AbstractServer implements ServerInterface
         $socket->listen($this->getPort());
         $ref = $this;
         $socket->on('connection', function (Connection $connection) use ($ref) {
-            $ref->getOutput() && $ref->getOutput()->writeln('New connection!');
             $connection->on('data', [$ref, 'routeMethod']);
         });
 

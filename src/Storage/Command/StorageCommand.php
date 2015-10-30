@@ -7,7 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Queue2StorageCommand extends Command
+class StorageCommand extends Command
 {
     /**
      * {@inheritdoc}
@@ -15,8 +15,8 @@ class Queue2StorageCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('martiis:queue:storage')
-            ->setDescription('Starts up queue 2 storage server');
+            ->setName('server:storage')
+            ->setDescription('Starts up storage server');
     }
 
     /**

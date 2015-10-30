@@ -28,8 +28,9 @@ class Queue2StorageServer extends AbstractServer implements Queue2StorageServerI
      */
     public function saveItem($item)
     {
-        $this->getOutput()->writeln('Storage: saving ' . $item);
+        $this->getOutput()->writeln('Storage: saving `' . $item . '`');
         $this->storage[] = $item;
+        file_put_contents('storage.txt', $item . "\n", FILE_APPEND);
     }
 
     /**

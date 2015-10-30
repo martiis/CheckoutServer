@@ -14,8 +14,6 @@ namespace Martiis\CheckoutServer\Queue;
 use Martiis\CheckoutServer\AbstractClient;
 use Martiis\CheckoutServer\Queue2StorageClientInterface;
 use Martiis\CheckoutServer\SocketPort;
-use React\EventLoop\Factory;
-use React\Stream\Stream;
 
 class Queue2StorageClient extends AbstractClient implements Queue2StorageClientInterface
 {
@@ -24,10 +22,7 @@ class Queue2StorageClient extends AbstractClient implements Queue2StorageClientI
      */
     public function saveItem($item)
     {
-        $loop = Factory::create();
-        $conn = new Stream($this->getClient(), $loop);
-        $conn->write(sprintf('%s %s', 'saveItem', $item));
-        $loop->tick();
+        $this->send(__FUNCTION__, $item);
     }
 
     /**

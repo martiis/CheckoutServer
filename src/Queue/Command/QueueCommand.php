@@ -1,13 +1,14 @@
 <?php
 
+
 namespace Martiis\CheckoutServer\Queue\Command;
 
-use Martiis\CheckoutServer\Queue\Payment2QueueServer;
+use Martiis\CheckoutServer\Queue\QueueServer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Payment2QueueCommand extends Command
+class QueueCommand extends Command
 {
     /**
      * {@inheritdoc}
@@ -15,8 +16,8 @@ class Payment2QueueCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('martiis:payment:queue')
-            ->setDescription('Starts up payment 2 queue server');
+            ->setName('server:queue')
+            ->setDescription('Starts up queue server');
     }
 
     /**
@@ -24,7 +25,7 @@ class Payment2QueueCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $server = new Payment2QueueServer();
+        $server = new QueueServer();
         $server->run($output);
     }
 }

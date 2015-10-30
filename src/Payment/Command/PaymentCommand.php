@@ -7,7 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Queue2PaymentCommand extends Command
+class PaymentCommand extends Command
 {
     /**
      * {@inheritdoc}
@@ -15,7 +15,7 @@ class Queue2PaymentCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('martiis:queue:payment')
+            ->setName('server:payment')
             ->setDescription('Starts up queue 2 payment server');
     }
 
