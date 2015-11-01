@@ -11,12 +11,10 @@
 
 namespace Martiis\CheckoutServer;
 
-interface Queue2PaymentServerInterface extends ServerInterface
+interface StorageClientInterface
 {
     /**
-     * Sends item to payment for authorization.
-     *
-     * @param mixed $data
+     * @param mixed $item
      */
-    public function authorizeItem($data);
+    public function save($item);
 }

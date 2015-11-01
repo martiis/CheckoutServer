@@ -54,7 +54,7 @@ abstract class AbstractClient
      * @param string $method
      * @param mixed  $argument
      */
-    protected function send($method, $argument)
+    protected function send($method, $argument = null)
     {
         $loop = Factory::create();
         $conn = new Stream($this->getClient(), $loop);

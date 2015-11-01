@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Martiis\CheckoutServer\Queue;
+namespace Martiis\CheckoutServer\Basket;
 
 use Martiis\CheckoutServer\AbstractClient;
-use Martiis\CheckoutServer\Queue2StorageClientInterface;
 use Martiis\CheckoutServer\SocketPort;
+use Martiis\CheckoutServer\StorageClientInterface;
 
-class Queue2StorageClient extends AbstractClient implements Queue2StorageClientInterface
+class Basket2StorageClient extends AbstractClient implements StorageClientInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function saveItem($item)
+    public function save($item)
     {
         $this->send(__FUNCTION__, $item);
     }

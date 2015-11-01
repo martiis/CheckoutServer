@@ -15,5 +15,5 @@ class SocketPort
 {
     const STORAGE = 4000;
     const PAYMENT = 4001;
-    const QUEUE = 4004;
+    const BASKET = 4004;
 }

@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Martiis\CheckoutServer\Storage\Command;
+namespace Martiis\CheckoutServer\Basket\Command;
 
-use Martiis\CheckoutServer\Storage\StorageServer;
+use Martiis\CheckoutServer\Basket\BasketClient;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class StorageCommand extends Command
+class CheckoutCommand extends Command
 {
     /**
      * {@inheritdoc}
@@ -24,8 +24,8 @@ class StorageCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('server:storage')
-            ->setDescription('Starts up storage server');
+            ->setName('basket:checkout')
+            ->setDescription('Basket checkout');
     }
 
     /**
@@ -33,6 +33,6 @@ class StorageCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        (new StorageServer())->run($output);
+        (new BasketClient())->checkout();
     }
 }

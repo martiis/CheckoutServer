@@ -11,12 +11,12 @@
 
 namespace Martiis\CheckoutServer;
 
-interface Payment2QueueClientInterface
+interface PaymentServerInterface extends ServerInterface
 {
     /**
-     * Asks queue to send item to storage.
+     * Checkout basket items.
      *
-     * @param mixed $item
+     * @param array $data
      */
-    public function sendToStorage($item);
+    public function checkout($data);
 }

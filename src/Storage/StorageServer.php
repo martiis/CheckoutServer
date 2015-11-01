@@ -12,12 +12,13 @@
 namespace Martiis\CheckoutServer\Storage;
 
 use Martiis\CheckoutServer\AbstractServer;
-use Martiis\CheckoutServer\Queue2StorageServerInterface;
 use Martiis\CheckoutServer\SocketPort;
-use React\Socket\Connection;
+use Martiis\CheckoutServer\StorageServerInterface;
 
-class Queue2StorageServer extends AbstractServer implements Queue2StorageServerInterface
+class StorageServer extends AbstractServer implements StorageServerInterface
 {
+    const FNAME = 'storage.txt';
+
     /**
      * @var array
      */
@@ -26,11 +27,16 @@ class Queue2StorageServer extends AbstractServer implements Queue2StorageServerI
     /**
      * {@inheritdoc}
      */
-    public function saveItem($item)
+    public function save($item)
     {
-        $this->getOutput()->writeln('Storage: saving `' . $item . '`');
-        $this->storage[] = $item;
-        file_put_contents('storage.txt', $item . "\n", FILE_APPEND);
+        $date = date('Y-m-d H:i:s');
+        $this->getOutput()->writeln("<info>Storage</info>: saving $date order.");
+
+        file_put_contents(static::FNAME, "==== $date ====\n", FILE_APPEND);
+        foreach ($item as $row) {
+            file_put_contents(static::FNAME, "{$row[0]}\t\t\t{$row[1]}\n", FILE_APPEND);
+        }
+        file_put_contents(static::FNAME, "\n", FILE_APPEND);
     }
 
     /**

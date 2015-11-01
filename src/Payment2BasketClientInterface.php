@@ -11,12 +11,10 @@
 
 namespace Martiis\CheckoutServer;
 
-interface Queue2StorageServerInterface extends ServerInterface
+interface Payment2BasketClientInterface
 {
     /**
-     * Saves item in local storage.
-     *
-     * @param mixed $item
+     * Approves basket.
      */
-    public function saveItem($item);
+    public function approve();
 }
