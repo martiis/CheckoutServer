@@ -22,7 +22,7 @@ class PaymentServer extends AbstractServer implements PaymentServerInterface
      */
     public function getPort()
     {
-        return SocketPort::PAYMENT;
+        return SocketPort::PAYMENT . '/payment.php';
     }
 
     /**
@@ -30,6 +30,8 @@ class PaymentServer extends AbstractServer implements PaymentServerInterface
      */
     public function checkout($data)
     {
+        var_dump($data);
+
         $this->getOutput()->writeln('<comment>Payment</comment>: calculating money...');
         sleep(2);
 

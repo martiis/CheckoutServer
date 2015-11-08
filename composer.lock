@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a8596f5d676184c4899f8875c9613840",
-    "content-hash": "3f5a51fe06f566154239ac750c8d81d4",
+    "hash": "b9e7549771281f6d5a77213a9cacfcb3",
+    "content-hash": "89fc395e93e9939bf30a5482f75dee43",
     "packages": [
         {
             "name": "evenement/evenement",
@@ -55,16 +55,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "4ef919b0cf3b1989523138b60163bbcb7ba1ff7e"
+                "reference": "4d0bdbe1206df7440219ce14c972aa57cc5e4982"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/4ef919b0cf3b1989523138b60163bbcb7ba1ff7e",
-                "reference": "4ef919b0cf3b1989523138b60163bbcb7ba1ff7e",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/4d0bdbe1206df7440219ce14c972aa57cc5e4982",
+                "reference": "4d0bdbe1206df7440219ce14c972aa57cc5e4982",
                 "shasum": ""
             },
             "require": {
@@ -109,7 +109,78 @@
                 "stream",
                 "uri"
             ],
-            "time": "2015-08-15 19:32:36"
+            "time": "2015-11-03 01:34:55"
+        },
+        {
+            "name": "hprose/hprose",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hprose/hprose-php.git",
+                "reference": "1852fb153ef0228b8e5e780f77cdbc6e281c82be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hprose/hprose-php/zipball/1852fb153ef0228b8e5e780f77cdbc6e281c82be",
+                "reference": "1852fb153ef0228b8e5e780f77cdbc6e281c82be",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Hprose.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ma Bingyao",
+                    "email": "andot@hprose.com",
+                    "homepage": "http://hprose.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "It is a modern, lightweight, cross-language, cross-platform, object-oriented, high performance, remote dynamic communication middleware. It is not only easy to use, but powerful. You just need a little time to learn, then you can use it to easily construct cross language cross platform distributed application system.",
+            "homepage": "http://hprose.com/",
+            "keywords": [
+                "HTML5",
+                "Hprose",
+                "Socket",
+                "ajax",
+                "async",
+                "communication",
+                "cross-domain",
+                "cross-language",
+                "cross-platform",
+                "framework",
+                "future",
+                "game",
+                "http",
+                "json",
+                "jsonrpc",
+                "library",
+                "middleware",
+                "phprpc",
+                "protocol",
+                "rpc",
+                "serialization",
+                "serialize",
+                "service",
+                "tcp",
+                "unix",
+                "web",
+                "webapi",
+                "webservice",
+                "websocket",
+                "xmlrpc"
+            ],
+            "time": "2015-09-07 11:18:48"
         },
         {
             "name": "psr/http-message",
@@ -700,7 +771,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "hprose/hprose": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

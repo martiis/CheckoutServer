@@ -2,8 +2,7 @@
 
 namespace Martiis\CheckoutServer;
 
-use React\EventLoop\Factory;
-use React\Stream\Stream;
+use Hprose\Http\Client as HproseHttpClient;
 
 abstract class AbstractClient
 {
@@ -14,7 +13,7 @@ abstract class AbstractClient
 
     final public function __construct()
     {
-        $this->client = @stream_socket_client(sprintf('%s:%s', $this->getHost(), $this->getPort()));
+        $this->client = new HproseHttpClient(sprintf('http://%s:%s', $this->getHost(), $this->getPort()));
     }
 
     /**
@@ -56,9 +55,11 @@ abstract class AbstractClient
      */
     protected function send($method, $argument = null)
     {
-        $loop = Factory::create();
-        $conn = new Stream($this->getClient(), $loop);
-        $conn->write(sprintf('%s %s', $method, json_encode($argument)));
-        $loop->tick();
+        $arg = [];
+        if ($argument !== null) {
+            $arg[] = $argument;
+        }
+
+        $this->client->invoke($method, $arg);
     }
 }

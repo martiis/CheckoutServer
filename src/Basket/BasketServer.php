@@ -23,10 +23,7 @@ class BasketServer extends AbstractServer implements
     Basket2PaymentServerInterface,
     Payment2BasketServerInterface
 {
-    /**
-     * @var array
-     */
-    private $queue = [];
+    const QUEUE_FNAME = 'queue.txt';
 
     /**
      * {@inheritdoc}
@@ -41,12 +38,12 @@ class BasketServer extends AbstractServer implements
      */
     public function add($item)
     {
-        $this->queue[] = $item;
-        end($this->queue);
-        $key = key($this->queue);
+        list($name, $price) = $item;
+        file_put_contents(self::QUEUE_FNAME, $name . ' ' . $price . "\n", FILE_APPEND);
+
         $this->getOutput() && $this
             ->getOutput()
-            ->writeln("<info>Basket</info>: inserted <comment>$key => $item[0], $item[1]</comment>");
+            ->writeln("<info>Basket</info>: inserted <comment>$name, $price</comment>");
     }
 
     /**
@@ -54,20 +51,20 @@ class BasketServer extends AbstractServer implements
      */
     public function remove($item)
     {
-        $removed = false;
-
-        foreach ($this->queue as $key => $basketItem) {
-            if ($basketItem[0] === $item) {
-                unset($this->queue[$key]);
-                $removed = true;
-                $this->getOutput()->writeln("<info>Basket</info>: removed $item");
-                break;
-            }
-        }
-
-        if (!$removed) {
-            $this->getOutput()->writeln("<error>Basket</error>: item $item not found!");
-        }
+//        $removed = false;
+//
+//        foreach ($this->queue as $key => $basketItem) {
+//            if ($basketItem[0] === $item) {
+//                unset($this->queue[$key]);
+//                $removed = true;
+//                $this->getOutput()->writeln("<info>Basket</info>: removed $item");
+//                break;
+//            }
+//        }
+//
+//        if (!$removed) {
+//            $this->getOutput()->writeln("<error>Basket</error>: item $item not found!");
+//        }
     }
 
     /**
@@ -75,7 +72,7 @@ class BasketServer extends AbstractServer implements
      */
     public function clean()
     {
-        $this->queue = [];
+        file_put_contents(self::QUEUE_FNAME, '');
         $this->getOutput()->writeln("<info>Basket</info>: clean");
     }
 
@@ -84,7 +81,7 @@ class BasketServer extends AbstractServer implements
      */
     public function checkout()
     {
-        (new Basket2PaymentClient())->checkout($this->queue);
+        (new Basket2PaymentClient())->checkout($this->read());
         $this->getOutput()->writeln("<info>Basket</info>: sent to checkout");
     }
 
@@ -94,8 +91,23 @@ class BasketServer extends AbstractServer implements
     public function approve()
     {
         $this->getOutput()->writeln("<info>Basket</info>: payment approved!");
-        (new Basket2StorageClient())->save($this->queue);
+        (new Basket2StorageClient())->save($this->read());
         $this->getOutput()->writeln('<info>Basket</info>: sent to storage!');
         $this->clean();
+    }
+
+    private function read()
+    {
+        $queue = [];
+
+        $resoure = fopen(self::QUEUE_FNAME, 'r');
+
+        while(($buffer = fgets($resoure)) !== false) {
+            $queue[] = explode(' ', $buffer, 2);
+        }
+
+        fclose($resoure);
+
+        return $queue;
     }
 }

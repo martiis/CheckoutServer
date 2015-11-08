@@ -75,7 +75,7 @@ abstract class AbstractServer implements ServerInterface
     /**
      * @param OutputInterface $output
      */
-    private function setOutput($output)
+    public function setOutput($output)
     {
         $this->output = $output;
     }

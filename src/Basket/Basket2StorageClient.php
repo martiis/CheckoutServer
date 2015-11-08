@@ -30,6 +30,6 @@ class Basket2StorageClient extends AbstractClient implements StorageClientInterf
      */
     public function getPort()
     {
-        return SocketPort::STORAGE;
+        return SocketPort::STORAGE . '/storage.php';
     }
 }

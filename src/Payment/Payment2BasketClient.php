@@ -22,7 +22,7 @@ class Payment2BasketClient extends AbstractClient implements Payment2BasketClien
      */
     public function getPort()
     {
-        return SocketPort::BASKET;
+        return SocketPort::BASKET . '/basket.php';
     }
 
     /**

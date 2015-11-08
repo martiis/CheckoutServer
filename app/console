@@ -4,19 +4,12 @@
 require_once __DIR__ . '/bootstrap.php';
 
 use Symfony\Component\Console\Application;
-use Martiis\CheckoutServer\Payment\Command\PaymentCommand;
-use Martiis\CheckoutServer\Basket\Command\BasketCommand;
 use Martiis\CheckoutServer\Basket\Command\AddCommand;
 use Martiis\CheckoutServer\Basket\Command\RemoveCommand;
 use Martiis\CheckoutServer\Basket\Command\CleanCommand;
 use Martiis\CheckoutServer\Basket\Command\CheckoutCommand;
-use Martiis\CheckoutServer\Storage\Command\StorageCommand;
 
 $app = new Application('Checkout Server Application', '0.1');
-
-$app->add(new PaymentCommand());
-$app->add(new StorageCommand());
-$app->add(new BasketCommand());
 
 $app->add(new AddCommand());
 $app->add(new RemoveCommand());

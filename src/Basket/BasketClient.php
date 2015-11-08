@@ -22,7 +22,7 @@ class BasketClient extends AbstractClient implements BasketClientInterface
      */
     public function getPort()
     {
-        return SocketPort::BASKET;
+        return SocketPort::BASKET . '/basket.php';
     }
 
     /**

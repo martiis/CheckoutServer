@@ -13,7 +13,7 @@ namespace Martiis\CheckoutServer;
 
 class SocketPort
 {
-    const STORAGE = 4000;
-    const PAYMENT = 4001;
-    const BASKET = 4004;
+    const STORAGE = 8008;
+    const PAYMENT = 8008;
+    const BASKET = 8008;
 }
