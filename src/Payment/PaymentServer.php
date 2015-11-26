@@ -22,15 +22,22 @@ class PaymentServer extends AbstractServer implements PaymentServerInterface
      */
     public function getPort()
     {
-        return SocketPort::PAYMENT . '/payment.php';
+        return SocketPort::PAYMENT;
     }
 
     /**
-     * {@inheritdoc}
+     * @WebMethod
+     *
+     * @desc Checkout basket items.
+     *
+     * @param string $data
+     *
+     * @return void
      */
     public function checkout($data)
     {
         var_dump($data);
+        $data = json_decode($data);
 
         $this->getOutput()->writeln('<comment>Payment</comment>: calculating money...');
         sleep(2);

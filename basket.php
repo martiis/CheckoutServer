@@ -17,7 +17,7 @@ if (isset($_GET['wsdl'])) {
 }
 
 try {
-    $stream = fopen('basket.txt', 'a+');
+    $stream = fopen('log_basket.txt', 'a+');
     $basket = new BasketServer();
     $basket->setOutput(new StreamOutput($stream, OutputInterface::VERBOSITY_NORMAL, null, new ConsoleFormatter()));
 

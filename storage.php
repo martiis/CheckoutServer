@@ -17,7 +17,7 @@ if (isset($_GET['wsdl'])) {
 }
 
 try {
-    $stream = fopen('storage.txt', 'a+');
+    $stream = fopen('log_storage.txt', 'a+');
     $storage = new StorageServer();
     $storage->setOutput(new StreamOutput($stream, OutputInterface::VERBOSITY_NORMAL, null, new ConsoleFormatter()));
 

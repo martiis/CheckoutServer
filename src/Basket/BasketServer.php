@@ -104,7 +104,12 @@ class BasketServer extends AbstractServer implements
      */
     public function checkout()
     {
+        $this->getOutput()->writeln('saugoma');
+
         (new Basket2PaymentClient())->checkout($this->read());
+
+        $this->getOutput()->writeln('baigta');
+
         $this->getOutput() && $this->getOutput()->writeln("<info>Basket</info>: sent to checkout");
     }
 

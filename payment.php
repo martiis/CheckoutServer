@@ -9,7 +9,7 @@ use Martiis\Library\ConsoleFormatter;
 use WSDL\WSDLCreator;
 
 $wsdl = new WSDLCreator('Martiis\CheckoutServer\Payment\PaymentServer', 'http://localhost:8008/payment.php');
-$wsdl->setNamespace("http://foo.bar");
+$wsdl->setNamespace("http://tuna.bar/");
 
 if (isset($_GET['wsdl'])) {
     $wsdl->renderWSDL();
@@ -17,7 +17,7 @@ if (isset($_GET['wsdl'])) {
 }
 
 try {
-    $stream = fopen('payment.txt', 'a+');
+    $stream = fopen('log_payment.txt', 'a+');
     $payment = new PaymentServer();
     $payment->setOutput(new StreamOutput($stream, OutputInterface::VERBOSITY_NORMAL, null, new ConsoleFormatter()));
 
