@@ -18,6 +18,9 @@ use Martiis\CheckoutServer\Payment2BasketServerInterface;
 use Martiis\CheckoutServer\Basket\Basket2StorageClient;
 use Martiis\CheckoutServer\SocketPort;
 
+/**
+ * BasketServer
+ */
 class BasketServer extends AbstractServer implements
     BasketServerInterface,
     Basket2PaymentServerInterface,
@@ -34,11 +37,17 @@ class BasketServer extends AbstractServer implements
     }
 
     /**
-     * {@inheritdoc}
+     * @WebMethod
+     *
+     * @desc Adds item to basket.
+     *
+     * @param string $item
+     *
+     * @return void
      */
     public function add($item)
     {
-        list($name, $price) = $item;
+        list($name, $price) = json_decode($item, true);
         file_put_contents(self::QUEUE_FNAME, $name . ' ' . $price . "\n", FILE_APPEND);
 
         $this->getOutput() && $this
@@ -47,7 +56,13 @@ class BasketServer extends AbstractServer implements
     }
 
     /**
-     * {@inheritdoc}
+     * @WebMethod
+     *
+     * @desc Removes item from basket.
+     *
+     * @param string $item
+     *
+     * @return void
      */
     public function remove($item)
     {
@@ -68,31 +83,43 @@ class BasketServer extends AbstractServer implements
     }
 
     /**
-     * {@inheritdoc}
+     * @WebMethod
+     *
+     * @desc Cleans out basket.
+     *
+     * @return void
      */
     public function clean()
     {
         file_put_contents(self::QUEUE_FNAME, '');
-        $this->getOutput()->writeln("<info>Basket</info>: clean");
+        $this->getOutput() && $this->getOutput()->writeln("<info>Basket</info>: clean");
     }
 
     /**
-     * {@inheritdoc}
+     * @WebMethod
+     *
+     * @desc Basket checkout.
+     *
+     * @return void
      */
     public function checkout()
     {
         (new Basket2PaymentClient())->checkout($this->read());
-        $this->getOutput()->writeln("<info>Basket</info>: sent to checkout");
+        $this->getOutput() && $this->getOutput()->writeln("<info>Basket</info>: sent to checkout");
     }
 
     /**
-     * {@inheritdoc}
+     * @WebMethod
+     *
+     * @desc Approves basket for checkout.
+     *
+     * @return void
      */
     public function approve()
     {
-        $this->getOutput()->writeln("<info>Basket</info>: payment approved!");
+        $this->getOutput() && $this->getOutput()->writeln("<info>Basket</info>: payment approved!");
         (new Basket2StorageClient())->save($this->read());
-        $this->getOutput()->writeln('<info>Basket</info>: sent to storage!');
+        $this->getOutput() && $this->getOutput()->writeln('<info>Basket</info>: sent to storage!');
         $this->clean();
     }
 

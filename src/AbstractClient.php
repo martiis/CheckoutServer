@@ -7,13 +7,21 @@ use Hprose\Http\Client as HproseHttpClient;
 abstract class AbstractClient
 {
     /**
-     * @var resource
+     * @var \SoapClient
      */
     private $client;
 
     final public function __construct()
     {
-        $this->client = new HproseHttpClient(sprintf('http://%s:%s', $this->getHost(), $this->getPort()));
+        $this->client = new \SoapClient(
+            "http://localhost:{$this->getPort()}?wsdl",
+            [
+                'uri' => 'http://foo.bar/',
+                'location' => "http://localhost:{$this->getPort()}",
+                'trace' => true,
+                'cache_wsdl' => WSDL_CACHE_NONE
+            ]
+        );
     }
 
     /**
@@ -34,7 +42,7 @@ abstract class AbstractClient
      */
     public function isConnected()
     {
-        return $this->client !== false;
+        return (bool)$this->client;
     }
 
     /**
@@ -55,11 +63,10 @@ abstract class AbstractClient
      */
     protected function send($method, $argument = null)
     {
-        $arg = [];
-        if ($argument !== null) {
-            $arg[] = $argument;
+        if ($argument === null) {
+            $this->client->{$method}();
+        } else {
+            $this->client->{$method}(json_encode($argument));
         }
-
-        $this->client->invoke($method, $arg);
     }
 }
