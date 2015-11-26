@@ -11,6 +11,9 @@ abstract class AbstractClient
      */
     private $client;
 
+    /**
+     * AbstractClient constructor.
+     */
     final public function __construct()
     {
         $this->client = new \SoapClient(

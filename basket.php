@@ -21,12 +21,12 @@ try {
     $basket = new BasketServer();
     $basket->setOutput(new StreamOutput($stream, OutputInterface::VERBOSITY_NORMAL, null, new ConsoleFormatter()));
 
-    $server = new SoapServer(null, array(
+    $server = new SoapServer(null, [
         'uri' => $wsdl->getNamespaceWithSanitizedClass(),
         'location' => $wsdl->getLocation(),
         'style' => SOAP_RPC,
         'use' => SOAP_LITERAL
-    ));
+    ]);
     $server->setObject($basket);
     $server->handle();
 } catch (SoapFault $e) {
