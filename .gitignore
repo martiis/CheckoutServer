@@ -3,3 +3,6 @@
 /vendor/
 storage.txt
 queue.txt
+log_basket.txt
+log_payment.txt
+log_storage.txt
