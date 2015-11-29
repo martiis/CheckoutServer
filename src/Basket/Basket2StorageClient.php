@@ -19,9 +19,9 @@ class Basket2StorageClient extends AbstractClient implements StorageClientInterf
     /**
      * {@inheritdoc}
      */
-    protected function getHost()
+    protected function getExchange()
     {
-        return parent::getHost() . '/storage';
+        return 'storage';
     }
 
     /**

@@ -30,12 +30,14 @@ class StorageServer extends AbstractServer implements StorageServerInterface
      */
     public function save($item)
     {
+
+
         $date = date('Y-m-d H:i:s');
         $this->getOutput()->writeln("<info>Storage</info>: saving $date order.");
 
         file_put_contents(static::FNAME, "==== $date ====\n", FILE_APPEND);
         foreach ($item as $row) {
-            file_put_contents(static::FNAME, "{$row[0]}\t\t\t{$row[1]}\n", FILE_APPEND);
+            file_put_contents(static::FNAME, "{$row[0]}\t\t\t{$row[1]}", FILE_APPEND);
         }
         file_put_contents(static::FNAME, "\n", FILE_APPEND);
     }

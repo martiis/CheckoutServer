@@ -19,9 +19,9 @@ class Basket2PaymentClient extends AbstractClient implements Basket2PaymentClien
     /**
      * {@inheritdoc}
      */
-    protected function getHost()
+    protected function getExchange()
     {
-        return parent::getHost() . '/payment';
+        return 'payment';
     }
 
     /**

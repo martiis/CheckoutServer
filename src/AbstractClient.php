@@ -2,37 +2,54 @@
 
 namespace Martiis\CheckoutServer;
 
-use GuzzleHttp\Client;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Message\AMQPMessage;
 
 abstract class AbstractClient
 {
     /**
-     * @var Client
+     * @var AMQPStreamConnection
      */
-    private $client;
+    private $connection;
+
+    /**
+     * @var AMQPChannel
+     */
+    private $channel;
 
     /**
      * AbstractClient constructor.
      */
     final public function __construct()
     {
-        $this->client = new Client();
+        $this->connection = new AMQPStreamConnection('localhost', 5672, 'user', 'user');
+        $this->channel = $this->connection->channel();
+        $this->channel->exchange_declare($this->getExchange(), 'direct', false, false, false);
     }
 
     /**
+     * AbstractClient destructor.
+     */
+    final public function __destruct()
+    {
+        $this->channel->close();
+        $this->connection->close();
+    }
+
+    /**
+     * Exchange name for client.
+     *
      * @return string
      */
-    protected function getHost()
-    {
-        return '127.0.0.1';
-    }
+    abstract protected function getExchange();
 
     /**
-     * @return Client
+     * @return AMQPChannel
      */
-    protected function getClient()
+    protected function getChannel()
     {
-        return $this->client;
+        return $this->channel;
     }
 
     /**
@@ -42,22 +59,11 @@ abstract class AbstractClient
     protected function send($method, $argument = null)
     {
         $this
-            ->getClient()
-            ->post(
-                $this->getUri($method),
-                $argument === null ? [] : ['body' => json_encode($argument)]
+            ->getChannel()
+            ->basic_publish(
+                new AMQPMessage($argument === null ? '' : json_encode($argument)),
+                $this->getExchange(),
+                strtolower($method)
             );
-    }
-
-    /**
-     * Formats uri for client.
-     *
-     * @param string $method
-     *
-     * @return string
-     */
-    private function getUri($method)
-    {
-        return $this->getHost() . '/' . strtolower($method);
     }
 }

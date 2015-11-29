@@ -20,9 +20,9 @@ class BasketClient extends AbstractClient implements BasketClientInterface
     /**
      * {@inheritdoc}
      */
-    protected function getHost()
+    protected function getExchange()
     {
-        return parent::getHost() . '/basket';
+        return 'basket';
     }
 
     /**
