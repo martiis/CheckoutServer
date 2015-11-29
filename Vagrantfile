@@ -6,7 +6,7 @@ Vagrant.configure(2) do |config|
   config.vm.box_check_update = false
   config.vm.network "forwarded_port", guest: 80, host: 8000
   config.vm.network "private_network", ip: "192.168.33.10"
-  config.vm.synced_folder ".", "/vagrant"
+  config.vm.synced_folder ".", "/vagrant", type: "nfs"
 
   config.vm.provider "virtualbox" do |vb|
      vb.gui = false
@@ -15,12 +15,12 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision "shell", inline: <<-SHELL
-     locale-gen UTF-8
      echo "deb http://www.rabbitmq.com/debian/ testing main" > /etc/apt/sources.list.d/rabbitmq.list
      wget https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
      apt-key add rabbitmq-signing-key-public.asc
      sudo apt-get update
-     sudo apt-get -y install php5-cli php5-json php5-curl curl git-core htop nano rabbitmq-server
+     sudo apt-get -y install language-pack-en apache2 php5 php5-cli php5-json php5-curl curl git-core htop nano rabbitmq-server
+     locale-gen UTF-8
      curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
      rabbitmq-plugins enable rabbitmq_management
      rabbitmqctl delete_user guest
