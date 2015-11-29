@@ -16,7 +16,7 @@ $output = new ConsoleOutput();
 $payment = new PaymentServer();
 $payment->setOutput($output);
 
-$methods = get_class_methods('Martiis\CheckoutServer\Basket\BasketServer');
+$methods = get_class_methods('Martiis\CheckoutServer\Payment\PaymentServer');
 foreach ($methods as $method) {
     $channel->queue_bind($qName, 'payment', strtolower($method));
 }
@@ -27,11 +27,7 @@ $callback = function (AMQPMessage $msg) use ($payment, $output) {
         $args = json_decode($msg->body, true);
 
         $output->writeln(' [x] Executing ' . $method);
-        if ($args !== null) {
-            $payment->{$method}($args);
-        } else {
-            $payment->{$method}();
-        }
+        $payment->{$method}($args);
     } else {
         throw new \BadMethodCallException($method . ' does not exist!');
     }

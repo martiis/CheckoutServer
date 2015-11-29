@@ -25,13 +25,8 @@ $callback = function (AMQPMessage $msg) use ($basket, $output) {
     $method = $msg->delivery_info['routing_key'];
     if (method_exists($basket, $method)) {
         $args = json_decode($msg->body, true);
-
         $output->writeln(' [x] Executing ' . $method);
-        if ($args !== null) {
-            $basket->{$method}($args);
-        } else {
-            $basket->{$method}();
-        }
+        $basket->{$method}($args);
     } else {
         throw new \BadMethodCallException($method . ' does not exist!');
     }
