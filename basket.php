@@ -2,40 +2,48 @@
 
 require_once __DIR__ . '/app/bootstrap.php';
 
-use Symfony\Component\Console\Output\StreamOutput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Martiis\CheckoutServer\Basket\BasketServer;
-use Martiis\Library\ConsoleFormatter;
 
-$app = new Silex\Application(['debug' => true]);
+$connection = new AMQPStreamConnection('localhost', 5672, 'user', 'user');
+$channel = $connection->channel();
+$channel->exchange_declare('basket', 'direct', false, false, false);
+list($qName, ,) = $channel->queue_declare("", false, false, true, false);
 
-$app->post('/basket/{method}', function (Request $request, $method) use ($app) {
-    $basket = new BasketServer();
+$output = new ConsoleOutput();
+$basket = new BasketServer();
+$basket->setOutput($output);
 
-    if (!method_exists($basket, $method)) {
-        return new JsonResponse(
-            ['message' => Response::$statusTexts[Response::HTTP_BAD_REQUEST]],
-            Response::HTTP_BAD_REQUEST
-        );
-    }
+$methods = get_class_methods('Martiis\CheckoutServer\Basket\BasketServer');
+foreach ($methods as $method) {
+    $channel->queue_bind($qName, 'basket', strtolower($method));
+}
 
-    $stream = fopen('log_basket.txt', 'a+');
-    $basket->setOutput(new StreamOutput($stream, OutputInterface::VERBOSITY_NORMAL, null, new ConsoleFormatter()));
+$callback = function (AMQPMessage $msg) use ($basket, $output) {
+    $method = $msg->delivery_info['routing_key'];
+    if (method_exists($basket, $method)) {
+        $args = json_decode($msg->body, true);
 
-    $args = json_decode($request->getContent());
-    if ($args !== null) {
-        $basket->{$method}($args);
+        $output->writeln(' [x] Executing ' . $method);
+        if ($args !== null) {
+            $basket->{$method}($args);
+        } else {
+            $basket->{$method}();
+        }
     } else {
-        $basket->{$method}();
+        throw new \BadMethodCallException($method . ' does not exist!');
     }
-    fclose($stream);
+};
 
-    return new JsonResponse(['message' => 'ok']);
-})->convert('method', function ($value) {
-    return strtolower($value);
-});
 
-$app->run();
+$channel->basic_consume($qName, '', false, true, false, false, $callback);
+$output->writeln(' [*] Waiting for basket actions. To exit press CTRL+C');
+
+while (count($channel->callbacks)) {
+    $channel->wait();
+}
+
+$channel->close();
+$connection->close();

@@ -2,40 +2,48 @@
 
 require_once __DIR__ . '/app/bootstrap.php';
 
-use Symfony\Component\Console\Output\StreamOutput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Martiis\CheckoutServer\Storage\StorageServer;
-use Martiis\Library\ConsoleFormatter;
 
-$app = new Silex\Application(['debug' => true]);
+$connection = new AMQPStreamConnection('localhost', 5672, 'user', 'user');
+$channel = $connection->channel();
+$channel->exchange_declare('storage', 'direct', false, false, false);
+list($qName, ,) = $channel->queue_declare("", false, false, true, false);
 
-$app->post('/storage/{method}', function (Request $request, $method) use ($app) {
-    $storage = new StorageServer();
+$output = new ConsoleOutput();
+$storage = new StorageServer();
+$storage->setOutput($output);
 
-    if (!method_exists($storage, $method)) {
-        return new JsonResponse(
-            ['message' => Response::$statusTexts[Response::HTTP_BAD_REQUEST]],
-            Response::HTTP_BAD_REQUEST
-        );
-    }
+$methods = get_class_methods('Martiis\CheckoutServer\Basket\BasketServer');
+foreach ($methods as $method) {
+    $channel->queue_bind($qName, 'storage', strtolower($method));
+}
 
-    $stream = fopen('log_storage.txt', 'a+');
-    $storage->setOutput(new StreamOutput($stream, OutputInterface::VERBOSITY_NORMAL, null, new ConsoleFormatter()));
+$callback = function (AMQPMessage $msg) use ($storage, $output) {
+    $method = $msg->delivery_info['routing_key'];
+    if (method_exists($storage, $method)) {
+        $args = json_decode($msg->body, true);
 
-    $args = json_decode($request->getContent());
-    if ($args !== null) {
-        $storage->{$method}($args);
+        $output->writeln(' [x] Executing ' . $method);
+        if ($args !== null) {
+            $storage->{$method}($args);
+        } else {
+            $storage->{$method}();
+        }
     } else {
-        $storage->{$method}();
+        throw new \BadMethodCallException($method . ' does not exist!');
     }
-    fclose($stream);
+};
 
-    return new JsonResponse(['message' => 'ok']);
-})->convert('method', function ($value) {
-    return strtolower($value);
-});
 
-$app->run();
+$channel->basic_consume($qName, '', false, true, false, false, $callback);
+$output->writeln(' [*] Waiting for storage actions. To exit press CTRL+C');
+
+while (count($channel->callbacks)) {
+    $channel->wait();
+}
+
+$channel->close();
+$connection->close();
