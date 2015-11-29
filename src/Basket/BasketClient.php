@@ -20,9 +20,9 @@ class BasketClient extends AbstractClient implements BasketClientInterface
     /**
      * {@inheritdoc}
      */
-    public function getPort()
+    protected function getHost()
     {
-        return SocketPort::BASKET . '/basket.php';
+        return parent::getHost() . '/basket';
     }
 
     /**

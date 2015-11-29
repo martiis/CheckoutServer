@@ -4,33 +4,38 @@ require_once __DIR__ . '/app/bootstrap.php';
 
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Martiis\CheckoutServer\Basket\BasketServer;
 use Martiis\Library\ConsoleFormatter;
-use WSDL\WSDLCreator;
 
-$wsdl = new WSDLCreator('Martiis\CheckoutServer\Basket\BasketServer', 'http://localhost:8008/basket.php');
-$wsdl->setNamespace("http://foo.bar");
+$app = new Silex\Application(['debug' => true]);
 
-if (isset($_GET['wsdl'])) {
-    $wsdl->renderWSDL();
-    exit;
-}
-
-try {
-    $stream = fopen('log_basket.txt', 'a+');
+$app->post('/basket/{method}', function (Request $request, $method) use ($app) {
     $basket = new BasketServer();
+
+    if (!method_exists($basket, $method)) {
+        return new JsonResponse(
+            ['message' => Response::$statusTexts[Response::HTTP_BAD_REQUEST]],
+            Response::HTTP_BAD_REQUEST
+        );
+    }
+
+    $stream = fopen('log_basket.txt', 'a+');
     $basket->setOutput(new StreamOutput($stream, OutputInterface::VERBOSITY_NORMAL, null, new ConsoleFormatter()));
 
-    $server = new SoapServer(null, [
-        'uri' => $wsdl->getNamespaceWithSanitizedClass(),
-        'location' => $wsdl->getLocation(),
-        'style' => SOAP_RPC,
-        'use' => SOAP_LITERAL
-    ]);
-    $server->setObject($basket);
-    $server->handle();
-} catch (SoapFault $e) {
-    print $e->getMessage();
-} finally {
+    $args = json_decode($request->getContent());
+    if ($args !== null) {
+        $basket->{$method}($args);
+    } else {
+        $basket->{$method}();
+    }
     fclose($stream);
-}
+
+    return new JsonResponse(['message' => 'ok']);
+})->convert('method', function ($value) {
+    return strtolower($value);
+});
+
+$app->run();

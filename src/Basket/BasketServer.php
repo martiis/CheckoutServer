@@ -47,7 +47,8 @@ class BasketServer extends AbstractServer implements
      */
     public function add($item)
     {
-        list($name, $price) = json_decode($item, true);
+        list($name, $price) = $item;
+
         file_put_contents(self::QUEUE_FNAME, $name . ' ' . $price . "\n", FILE_APPEND);
 
         $this->getOutput() && $this
@@ -134,7 +135,7 @@ class BasketServer extends AbstractServer implements
 
         $resoure = fopen(self::QUEUE_FNAME, 'r');
 
-        while(($buffer = fgets($resoure)) !== false) {
+        while (($buffer = fgets($resoure)) !== false) {
             $queue[] = explode(' ', $buffer, 2);
         }
 

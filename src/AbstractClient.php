@@ -2,12 +2,12 @@
 
 namespace Martiis\CheckoutServer;
 
-use Hprose\Http\Client as HproseHttpClient;
+use GuzzleHttp\Client;
 
 abstract class AbstractClient
 {
     /**
-     * @var \SoapClient
+     * @var Client
      */
     private $client;
 
@@ -16,15 +16,7 @@ abstract class AbstractClient
      */
     final public function __construct()
     {
-        $this->client = new \SoapClient(
-            "http://localhost:{$this->getPort()}?wsdl",
-            [
-                'uri' => 'http://foo.bar/',
-                'location' => "http://localhost:{$this->getPort()}",
-                'trace' => true,
-                'cache_wsdl' => WSDL_CACHE_NONE
-            ]
-        );
+        $this->client = new Client();
     }
 
     /**
@@ -36,27 +28,10 @@ abstract class AbstractClient
     }
 
     /**
-     * @return int
-     */
-    abstract public function getPort();
-
-    /**
-     * @return bool
-     */
-    public function isConnected()
-    {
-        return (bool)$this->client;
-    }
-
-    /**
-     * @return resource
+     * @return Client
      */
     protected function getClient()
     {
-        if (!$this->isConnected()) {
-            throw new \LogicException('Client is not connected!');
-        }
-
         return $this->client;
     }
 
@@ -66,10 +41,23 @@ abstract class AbstractClient
      */
     protected function send($method, $argument = null)
     {
-        if ($argument === null) {
-            $this->client->{$method}();
-        } else {
-            $this->client->{$method}(json_encode($argument));
-        }
+        $this
+            ->getClient()
+            ->post(
+                $this->getUri($method),
+                $argument === null ? [] : ['body' => json_encode($argument)]
+            );
+    }
+
+    /**
+     * Formats uri for client.
+     *
+     * @param string $method
+     *
+     * @return string
+     */
+    private function getUri($method)
+    {
+        return $this->getHost() . '/' . strtolower($method);
     }
 }
