@@ -12,14 +12,13 @@
     "require": {
         "symfony/console": "~2.7",
         "react/react": "~0.4",
-        "hprose/hprose": "dev-master",
-        "piotrooo/wsdl-creator": "^1.4"
+        "silex/silex": "~1.3",
+        "guzzlehttp/guzzle": "~6.1"
     },
     "autoload": {
         "psr-4": {
             "Martiis\\CheckoutServer\\": "src/",
-            "Martiis\\Library\\": "lib/",
-            "Hprose\\": "vendor/hprose/hprose/src/Hprose"
+            "Martiis\\Library\\": "lib/"
         }
     }
 }
