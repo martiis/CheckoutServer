@@ -19,7 +19,7 @@ Vagrant.configure(2) do |config|
      wget https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
      apt-key add rabbitmq-signing-key-public.asc
      sudo apt-get update
-     sudo apt-get -y install language-pack-en apache2 php5 php5-cli php5-json php5-curl curl git-core htop nano rabbitmq-server
+     sudo apt-get -y install language-pack-en nginx php5-fpm php5-cli php5-json php5-curl curl git-core htop nano rabbitmq-server
      locale-gen UTF-8
      curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
      rabbitmq-plugins enable rabbitmq_management
