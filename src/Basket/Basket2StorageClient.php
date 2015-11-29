@@ -12,7 +12,6 @@
 namespace Martiis\CheckoutServer\Basket;
 
 use Martiis\CheckoutServer\AbstractClient;
-use Martiis\CheckoutServer\SocketPort;
 use Martiis\CheckoutServer\StorageClientInterface;
 
 class Basket2StorageClient extends AbstractClient implements StorageClientInterface
@@ -20,16 +19,16 @@ class Basket2StorageClient extends AbstractClient implements StorageClientInterf
     /**
      * {@inheritdoc}
      */
-    public function save($item)
+    protected function getHost()
     {
-        $this->send(__FUNCTION__, $item);
+        return parent::getHost() . '/storage';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getPort()
+    public function save($item)
     {
-        return SocketPort::STORAGE . '/storage.php';
+        $this->send(__FUNCTION__, $item);
     }
 }

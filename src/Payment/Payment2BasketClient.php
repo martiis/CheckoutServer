@@ -13,16 +13,15 @@ namespace Martiis\CheckoutServer\Payment;
 
 use Martiis\CheckoutServer\AbstractClient;
 use Martiis\CheckoutServer\Payment2BasketClientInterface;
-use Martiis\CheckoutServer\SocketPort;
 
 class Payment2BasketClient extends AbstractClient implements Payment2BasketClientInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getPort()
+    protected function getHost()
     {
-        return SocketPort::BASKET . '/basket.php';
+        return parent::getHost() . '/basket';
     }
 
     /**

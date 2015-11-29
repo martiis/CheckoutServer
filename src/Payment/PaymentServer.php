@@ -36,9 +36,6 @@ class PaymentServer extends AbstractServer implements PaymentServerInterface
      */
     public function checkout($data)
     {
-        var_dump($data);
-        $data = json_decode($data);
-
         $this->getOutput()->writeln('<comment>Payment</comment>: calculating money...');
         sleep(2);
 

@@ -4,33 +4,38 @@ require_once __DIR__ . '/app/bootstrap.php';
 
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Martiis\CheckoutServer\Payment\PaymentServer;
 use Martiis\Library\ConsoleFormatter;
-use WSDL\WSDLCreator;
 
-$wsdl = new WSDLCreator('Martiis\CheckoutServer\Payment\PaymentServer', 'http://localhost:8008/payment.php');
-$wsdl->setNamespace("http://tuna.bar/");
+$app = new Silex\Application(['debug' => true]);
 
-if (isset($_GET['wsdl'])) {
-    $wsdl->renderWSDL();
-    exit;
-}
-
-try {
-    $stream = fopen('log_payment.txt', 'a+');
+$app->post('/payment/{method}', function (Request $request, $method) use ($app) {
     $payment = new PaymentServer();
+
+    if (!method_exists($payment, $method)) {
+        return new JsonResponse(
+            ['message' => Response::$statusTexts[Response::HTTP_BAD_REQUEST]],
+            Response::HTTP_BAD_REQUEST
+        );
+    }
+
+    $stream = fopen('log_payment.txt', 'a+');
     $payment->setOutput(new StreamOutput($stream, OutputInterface::VERBOSITY_NORMAL, null, new ConsoleFormatter()));
 
-    $server = new SoapServer(null, [
-        'uri' => $wsdl->getNamespaceWithSanitizedClass(),
-        'location' => $wsdl->getLocation(),
-        'style' => SOAP_RPC,
-        'use' => SOAP_LITERAL
-    ]);
-    $server->setObject($payment);
-    $server->handle();
-} catch (SoapFault $e) {
-    print $e->getMessage();
-} finally {
+    $args = json_decode($request->getContent());
+    if ($args !== null) {
+        $payment->{$method}($args);
+    } else {
+        $payment->{$method}();
+    }
     fclose($stream);
-}
+
+    return new JsonResponse(['message' => 'ok']);
+})->convert('method', function ($value) {
+    return strtolower($value);
+});
+
+$app->run();

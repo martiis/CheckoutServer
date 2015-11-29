@@ -20,22 +20,16 @@ class StorageServer extends AbstractServer implements StorageServerInterface
     const FNAME = 'storage.txt';
 
     /**
-     * @var array
-     */
-    private $storage = [];
-
-    /**
      * @WebMethod
      *
      * @desc Saves item in local storage.
      *
-     * @param string $item
+     * @param array $item
      *
      * @return void
      */
     public function save($item)
     {
-        $item = json_decode($item);
         $date = date('Y-m-d H:i:s');
         $this->getOutput()->writeln("<info>Storage</info>: saving $date order.");
 
