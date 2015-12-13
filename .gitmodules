@@ -1,0 +1,8 @@
+[submodule "rest"]
+	path = rest
+	url = https://github.com/martiis/CheckoutServer.git
+	branch = rest
+[submodule "soap"]
+	path = soap
+	url = https://github.com/martiis/CheckoutServer.git
+	branch = soap
