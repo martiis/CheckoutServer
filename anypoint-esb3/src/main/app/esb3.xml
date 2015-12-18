@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+    <http:listener-config name="HTTP_Listener_Configuration_8081" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <ws:consumer-config name="SoapBasket" wsdlLocation="http://localhost:8008/basket.php?wsdl" service="BasketServerService" port="BasketServerPort" serviceAddress="http://localhost:8008/basket.php" doc:name="Web Service Consumer"/>
+    <ws:consumer-config name="SoapPayment" wsdlLocation="http://localhost:8008/payment.php?wsdl" service="PaymentServerService" port="PaymentServerPort" serviceAddress="http://localhost:8008/payment.php" doc:name="Web Service Consumer"/>
+    <flow name="Basket_checkout_flow">
+        <http:listener config-ref="HTTP_Listener_Configuration_8081" path="/basket/checkout" doc:name="HTTP"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace sch http://www.mulesoft.com/schemas/Mule/Schema.xsd
+---
+{
+	sch#checkout: {}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <ws:consumer config-ref="SoapBasket" operation="checkout" doc:name="Soap basket checkout"/>
+    </flow>
+    <flow name="Basket_clean_flow">
+        <http:listener config-ref="HTTP_Listener_Configuration_8081" path="/basket/clean" doc:name="Rest Basket clean"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace sch http://www.mulesoft.com/schemas/Mule/Schema.xsd
+---
+{
+	sch#clean: {}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <ws:consumer config-ref="SoapBasket" operation="clean" doc:name="Soap basket clean"/>
+    </flow>
+    <flow name="Basket_add_flow">
+        <http:listener config-ref="HTTP_Listener_Configuration_8081" path="/basket/add" doc:name="Rest Basket Add"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace sch http://www.mulesoft.com/schemas/Mule/Schema.xsd
+---
+{
+	sch#add: {
+		sch#name: inboundProperties."http.query.params".name,
+		sch#price: inboundProperties."http.query.params".price
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <ws:consumer config-ref="SoapBasket" operation="add" doc:name="Soap Basket Add"/>
+    </flow>
+</mule>

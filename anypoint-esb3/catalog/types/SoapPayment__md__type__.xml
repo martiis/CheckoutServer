@@ -1,0 +1,102 @@
+<metadata__catalog__entry>
+  <version>5.2.0.0</version>
+  <types class="tree-map">
+    <entry>
+      <org.mule.common.metadata.DefaultMetaDataKey>
+        <id></id>
+        <displayName></displayName>
+        <category>DEFAULT</category>
+        <metaDataKeyPropertiesManager>
+          <properties>
+            <org.mule.common.metadata.key.property.dsql.DsqlFromMetaDataKeyProperty/>
+          </properties>
+        </metaDataKeyPropertiesManager>
+      </org.mule.common.metadata.DefaultMetaDataKey>
+      <org.mule.common.metadata.DefaultXmlMetaDataModel>
+        <dataType>XML</dataType>
+        <metaDataModelPropertiesManager>
+          <properties>
+            <org.mule.common.metadata.property.TextBasedExampleMetaDataModelProperty/>
+            <org.mule.common.metadata.property.xml.XsiTypeMetaDataProperty>
+              <name>
+                <namespaceURI>http://www.w3.org/2001/XMLSchema</namespaceURI>
+                <localPart>void</localPart>
+                <prefix></prefix>
+              </name>
+            </org.mule.common.metadata.property.xml.XsiTypeMetaDataProperty>
+            <org.mule.common.metadata.property.StructureIdentifierMetaDataModelProperty>
+              <metaDataKey class="org.mule.common.metadata.DefaultMetaDataKey" reference="../../../../../org.mule.common.metadata.DefaultMetaDataKey"/>
+              <derivedStructure>false</derivedStructure>
+              <generatedStructure>false</generatedStructure>
+            </org.mule.common.metadata.property.StructureIdentifierMetaDataModelProperty>
+          </properties>
+        </metaDataModelPropertiesManager>
+        <fields/>
+        <rootElement>
+          <namespaceURI></namespaceURI>
+          <localPart></localPart>
+          <prefix></prefix>
+        </rootElement>
+        <schemas class="org.mule.common.metadata.StringBasedSchemaProvider">
+          <schemas>
+            <string>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;xsd:schema xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns=&quot;http://tuna.bar/martiis/checkoutserver/payment/paymentserver/types&quot; xmlns:ns=&quot;http://tuna.bar/martiis/checkoutserver/payment/paymentserver/types&quot; xmlns:soap=&quot;http://schemas.xmlsoap.org/wsdl/soap/&quot; xmlns:soapenc=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot; xmlns:tns=&quot;http://tuna.bar/martiis/checkoutserver/payment/paymentserver&quot; targetNamespace=&quot;http://tuna.bar/martiis/checkoutserver/payment/paymentserver/types&quot;/&gt;</string>
+          </schemas>
+          <encoding>UTF-8</encoding>
+          <baseUri>http://localhost:8008/payment.php?wsdl</baseUri>
+        </schemas>
+        <namespaceManager>
+          <namespacePrefix/>
+        </namespaceManager>
+      </org.mule.common.metadata.DefaultXmlMetaDataModel>
+    </entry>
+    <entry>
+      <org.mule.common.metadata.DefaultMetaDataKey>
+        <id>data</id>
+        <displayName>data</displayName>
+        <category>DEFAULT</category>
+        <metaDataKeyPropertiesManager>
+          <properties>
+            <org.mule.common.metadata.key.property.dsql.DsqlFromMetaDataKeyProperty/>
+          </properties>
+        </metaDataKeyPropertiesManager>
+      </org.mule.common.metadata.DefaultMetaDataKey>
+      <org.mule.common.metadata.DefaultXmlMetaDataModel>
+        <dataType>XML</dataType>
+        <metaDataModelPropertiesManager>
+          <properties>
+            <org.mule.common.metadata.property.TextBasedExampleMetaDataModelProperty/>
+            <org.mule.common.metadata.property.xml.XsiTypeMetaDataProperty>
+              <name>
+                <namespaceURI>http://www.w3.org/2001/XMLSchema</namespaceURI>
+                <localPart>string</localPart>
+                <prefix></prefix>
+              </name>
+            </org.mule.common.metadata.property.xml.XsiTypeMetaDataProperty>
+            <org.mule.common.metadata.property.StructureIdentifierMetaDataModelProperty>
+              <metaDataKey class="org.mule.common.metadata.DefaultMetaDataKey" reference="../../../../../org.mule.common.metadata.DefaultMetaDataKey"/>
+              <derivedStructure>false</derivedStructure>
+              <generatedStructure>false</generatedStructure>
+            </org.mule.common.metadata.property.StructureIdentifierMetaDataModelProperty>
+          </properties>
+        </metaDataModelPropertiesManager>
+        <fields/>
+        <rootElement>
+          <namespaceURI></namespaceURI>
+          <localPart>data</localPart>
+          <prefix></prefix>
+        </rootElement>
+        <schemas class="org.mule.common.metadata.StringBasedSchemaProvider">
+          <schemas>
+            <string>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;xsd:schema xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns=&quot;http://tuna.bar/martiis/checkoutserver/payment/paymentserver/types&quot; xmlns:ns=&quot;http://tuna.bar/martiis/checkoutserver/payment/paymentserver/types&quot; xmlns:soap=&quot;http://schemas.xmlsoap.org/wsdl/soap/&quot; xmlns:soapenc=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot; xmlns:tns=&quot;http://tuna.bar/martiis/checkoutserver/payment/paymentserver&quot; targetNamespace=&quot;http://tuna.bar/martiis/checkoutserver/payment/paymentserver/types&quot;/&gt;</string>
+          </schemas>
+          <encoding reference="../../../../entry/org.mule.common.metadata.DefaultXmlMetaDataModel/schemas/encoding"/>
+          <baseUri>http://localhost:8008/payment.php?wsdl</baseUri>
+        </schemas>
+        <namespaceManager>
+          <namespacePrefix/>
+        </namespaceManager>
+      </org.mule.common.metadata.DefaultXmlMetaDataModel>
+    </entry>
+  </types>
+  <connectorName>SoapPayment</connectorName>
+</metadata__catalog__entry>

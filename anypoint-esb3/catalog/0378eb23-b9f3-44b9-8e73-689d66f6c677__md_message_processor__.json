@@ -1,0 +1,11 @@
+{
+    "inputMessageMetadata": {},
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "SoapBasket",
+            "typeId": "item"
+        }
+    },
+    "id": "0378eb23-b9f3-44b9-8e73-689d66f6c677",
+    "version": "5.2.0.0"
+}
